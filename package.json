@@ -1,8 +1,20 @@
 {
-  "name": "vite-react",
-  "private": true,
+  "name": "emielster-dev",
   "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "homepage": "https://github.com/emielster/emielster-dev#readme",
+  "bugs": {
+    "url": "https://github.com/emielster/emielster-dev/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emielster/emielster-dev.git"
+  },
+  "license": "ISC",
+  "author": "emielster",
   "type": "module",
+  "main": "eslint.config.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -10,8 +22,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/three": "^0.182.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "three": "^0.182.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
