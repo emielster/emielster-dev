@@ -28,7 +28,6 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg-space);
   color: var(--text-primary);
   line-height: 1.6;
@@ -36,7 +35,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Monaco', 'Menlo', monospace;
   font-weight: 700;
   line-height: 1.1;
 }
