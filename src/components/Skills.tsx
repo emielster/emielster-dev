@@ -10,8 +10,8 @@ const skills = [
 ];
 
 const technologies = [
-  'React', 'TypeScript', 'Node.js', 'Python', 'AWS', 'Docker',
-  'GraphQL', 'PostgreSQL', 'MongoDB', 'Figma', 'Git', 'Linux'
+  'Lua(u)', 'Pulsar', 'Fusion', 'React', 'TypeScript', 'Three.js',
+  'Rojo', 'Git', 'Node.js', 'Figma', 'Blender', 'Photoshop'
 ];
 
 export function Skills() {
@@ -25,11 +25,11 @@ export function Skills() {
           className={`skills-content ${isVisible ? 'visible' : ''}`}
         >
           <div className="skills-header">
-            <span className="section-label">What I Do</span>
+            <span className="section-eyebrow">What I Do</span>
             <h2 className="section-title">
               Skills & <span className="text-gradient">Expertise</span>
             </h2>
-            <p className="section-subtitle">
+            <p className="section-description">
                                   Every project is a chance to learn, innovate, and make something that matters. My goal is to combine creativity and technical skill to deliver experiences that are both functional and inspiring.
 
             </p>

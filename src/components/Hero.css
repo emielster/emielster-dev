@@ -11,23 +11,47 @@
   max-width: 900px;
   text-align: center;
   animation: fade-in-up 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.hero-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  border-radius: 50px;
-  font-size: 0.8rem;
-  color: #10b981;
+.hero-profile {
   margin-bottom: 2rem;
   animation: fade-in-up 1s ease-out 0.1s both;
 }
 
-.status-dot {
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent-primary);
+  box-shadow: 0 8px 32px var(--accent-glow), 0 0 0 8px var(--bg-tertiary);
+  transition: all 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 48px var(--accent-glow), 0 0 0 8px var(--bg-tertiary);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 50px;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  animation: fade-in-up 1s ease-out 0.1s both;
+  font-weight: 500;
+}
+
+.badge-dot {
   width: 8px;
   height: 8px;
   background: #10b981;

@@ -41,23 +41,68 @@
   line-height: 1.7;
 }
 
-.contact-email {
-  display: inline-block;
-  font-family: 'Space Grotesk', monospace;
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 3rem;
-  padding: 1rem 2rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 50px;
+.contact-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+}
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  text-align: left;
   transition: all 0.3s ease;
 }
 
-.contact-email:hover {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 30px var(--accent-glow);
-  color: var(--accent-primary);
+.contact-card:hover {
+  transform: translateY(-4px);
+}
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.contact-icon.discord {
+  background: linear-gradient(135deg, #5865F2, #7289da);
+  color: white;
+}
+
+.contact-card:hover .contact-icon {
+  transform: scale(1.1);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-label {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.contact-value {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: 'Space Grotesk', monospace;
 }
 
 .social-links {
@@ -95,7 +140,7 @@
 /* Footer */
 .footer {
   padding: 2rem 0;
-  border-top: 1px solid var(--glass-border);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .footer-content {
@@ -118,9 +163,8 @@
     padding: 6rem 0 0;
   }
 
-  .contact-email {
-    font-size: 1rem;
-    padding: 0.75rem 1.5rem;
+  .contact-methods {
+    grid-template-columns: 1fr;
   }
 
   .footer-content {

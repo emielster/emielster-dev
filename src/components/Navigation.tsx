@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 import './Navigation.css';
 
 interface SubMenuItem {
@@ -24,6 +25,7 @@ const navLinks: NavLink[] = [
       { label: 'All Projects', href: '#projects', description: 'View everything' },
     ]
   },
+  { label: 'Games', href: '#games' },
   { label: 'Skills', href: '#skills' },
   { label: 'Contact', href: '#contact' },
 ];
@@ -32,8 +34,10 @@ export function Navigation() {
   const [activeSection, setActiveSection] = useState('hero');
   const [activePath, setActivePath] = useState<string[]>(['_em']);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [submenuPosition, setSubmenuPosition] = useState({ left: 0 });
   const submenuRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const projectsButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,6 +98,12 @@ export function Navigation() {
 
   const toggleSubmenu = (e: React.MouseEvent, label: string) => {
     e.preventDefault();
+    
+    if (label === 'Projects' && projectsButtonRef.current) {
+      const rect = projectsButtonRef.current.getBoundingClientRect();
+      setSubmenuPosition({ left: rect.left + rect.width / 2 });
+    }
+    
     setOpenSubmenu(openSubmenu === label ? null : label);
   };
 
@@ -128,6 +138,7 @@ export function Navigation() {
               >
                 {link.subMenu ? (
                   <button
+                    ref={link.label === 'Projects' ? projectsButtonRef : null}
                     className={`nav-link ${
                       activeSection === link.href.slice(1) || 
                       activeSection.startsWith(link.href.slice(1) + '-') 
@@ -165,11 +176,15 @@ export function Navigation() {
               </li>
             ))}
           </ul>
+          
+          <div className="nav-divider" />
+          
+          <ThemeToggle />
         </div>
 
         {/* Submenu rendered outside nav-pill but inside nav-container */}
         {openSubmenu && (
-          <div className="submenu-wrapper">
+          <div className="submenu-wrapper" style={{ left: `${submenuPosition.left}px` }}>
             <div className="submenu glass" ref={submenuRef}>
               {navLinks.find(link => link.label === openSubmenu)?.subMenu?.map(subItem => (
                 <a

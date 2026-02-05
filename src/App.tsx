@@ -4,19 +4,21 @@ import { Hero } from './components/Hero';
 import { Projects } from './components/Projects';
 import { Contact } from './components/Contact';
 import { Skills } from './components/Skills';
+import { Games } from './components/Games';
+import { Reviews } from './components/Reviews';
 import './index.css';
 
 function App() {
   return (
     <>
       <SpaceScene />
-      <div className="dotted-overlay" />
       <Navigation />
       <main className="content">
         <Hero />
         <Projects />
+        <Games />
         <Skills />
-      {/*  <About /> */}
+        <Reviews />
         <Contact />
       </main>
     </>
