@@ -23,7 +23,7 @@ export function About() {
               </h2>
               <div className="about-text">
                 <p>
-                  I build worlds, websites, and tools —whether it's crafting experiences in Roblox Studio, developing scalable web apps, or experimenting with Python and C++. I love turning ideas into reality and constantly pushing the boundaries of what technology can do.
+                  I build worlds, websites, and tools: whether it's crafting experiences in Roblox Studio, developing scalable web apps, or experimenting with Python and C++. I love turning ideas into reality and constantly pushing the boundaries of what technology can do.
                 </p>
                 <p>
                     Every project is a chance to learn, innovate, and make something that matters. My goal is to combine creativity and technical skill to deliver experiences that are both functional and inspiring.

@@ -87,7 +87,6 @@
   transform: translateY(-2px);
 }
 
-/* Responsive */
 @media (max-width: 968px) {
   .about {
     padding: 6rem 0;
@@ -104,5 +103,15 @@
 
   .about-skills {
     padding-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .about {
+    padding: 4rem 0;
+  }
+
+  .about-grid {
+    gap: 2rem;
   }
 }

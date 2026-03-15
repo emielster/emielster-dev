@@ -10,35 +10,37 @@ const games = [
     role: 'Co-Owner',
     year: '2025-2026',
     platform: 'Roblox',
-    robloxUrl: 'https://www.roblox.com/games/your-game-id',
+    robloxUrl: 'https://www.roblox.com/games/139490463821898/Chill-donations',
   },
   {
     id: 2,
-    title: 'Game Title 2',
-    description: 'Another awesome project',
-    image: 'https://via.placeholder.com/300x200',
-    role: 'UI/UX Designer',
+    title: 'Donate For Time',
+    description: 'Another donation game :d',
+    image: 'https://tr.rbxcdn.com/180DAY-fa4b4ccdeb0c8337e589eccca959e847/768/432/Image/Png/noFilter',
+    role: 'Owner/Creator',
     year: '2025',
     platform: 'Roblox',
-    robloxUrl: 'https://www.roblox.com/games/your-game-id',
+    robloxUrl: 'https://www.roblox.com/games/82258001680556/Donate-For-Time',
   },
   {
     id: 3,
-    title: 'Game Title 3',
-    description: 'Collaborative game development',
-    image: 'https://via.placeholder.com/300x200',
-    role: 'Backend Developer',
-    year: '2024',
-    platform: 'Roblox',
+    title: 'Justified Jump',
+    description: 'My first Unity game',
+    image: 'https://placehold.co/600x400?text=Justified+Jump',
+    role: 'Owner/Creator',
+    year: '2020',
+    platform: 'Unity',
+    robloxUrl: 'https://unityemiel.itch.io/justified-jump',
   },
   {
     id: 4,
-    title: 'Game Title 4',
-    description: 'Fun multiplayer experience',
-    image: 'https://via.placeholder.com/300x200',
-    role: 'Scripter',
-    year: '2024',
+    title: 'Hovers RNG',
+    description: 'Fun RNG game for Roblox!',
+    image: 'https://placehold.co/600x400?text=Hovers+RNG',
+    role: 'Creator/Developer',
+    year: '2023',
     platform: 'Roblox',
+    robloxUrl: 'https://www.roblox.com/games/17302628846/hovers-rng',
   },
 ];
 
@@ -87,7 +89,7 @@ export function Games() {
                         className="game-roblox-link"
                       >
                         <img src="/assets/roblox.png" alt="Roblox" className="roblox-icon" />
-                        <span className="roblox-text">View on Roblox</span>
+                        <span className="roblox-text">View</span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="arrow-icon">
                           <path d="M7 17L17 7M17 7H7M17 7V17"/>
                         </svg>

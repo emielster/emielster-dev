@@ -182,7 +182,6 @@ export function Navigation() {
           <ThemeToggle />
         </div>
 
-        {/* Submenu rendered outside nav-pill but inside nav-container */}
         {openSubmenu && (
           <div className="submenu-wrapper" style={{ left: `${submenuPosition.left}px` }}>
             <div className="submenu glass" ref={submenuRef}>

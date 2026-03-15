@@ -160,7 +160,6 @@
   transform: translate(3px, -3px);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .projects {
     padding: 6rem 0;
@@ -178,5 +177,23 @@
 
   .project-number {
     font-size: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects {
+    padding: 4rem 0;
+  }
+
+  .project-card {
+    padding: 1rem;
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+  }
+
+  .project-description {
+    font-size: 0.875rem;
   }
 }

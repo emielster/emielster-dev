@@ -137,7 +137,6 @@
   transform: scale(1.1);
 }
 
-/* Footer */
 .footer {
   padding: 2rem 0;
   border-top: 1px solid var(--border-subtle);
@@ -157,7 +156,6 @@
   color: var(--text-muted);
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   .contact {
     padding: 6rem 0 0;
@@ -170,5 +168,11 @@
   .footer-content {
     flex-direction: column;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact {
+    padding: 4rem 0 0;
   }
 }

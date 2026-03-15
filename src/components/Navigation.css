@@ -155,7 +155,6 @@
   font-weight: 600;
 }
 
-/* Submenu Styles */
 .has-submenu .nav-link {
   padding-right: 0.75rem;
 }
@@ -317,7 +316,6 @@
   }
 }
 
-/* Small mobile */
 @media (max-width: 480px) {
   .nav-pill {
     flex-direction: column;
@@ -357,7 +355,6 @@
   }
 }
 
-/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .nav-link,
   .submenu-arrow,
