@@ -27,9 +27,9 @@ function getThemeColors() {
 function ProfilePic() {
   const wrapRef   = useRef<HTMLDivElement>(null);
   const cardRef   = useRef<HTMLDivElement>(null);
-  const layer1Ref = useRef<HTMLDivElement>(null); // floats closest
-  const layer2Ref = useRef<HTMLDivElement>(null); // floats mid
-  const layer3Ref = useRef<HTMLDivElement>(null); // floats furthest
+  const layer1Ref = useRef<HTMLDivElement>(null);
+  const layer2Ref = useRef<HTMLDivElement>(null);
+  const layer3Ref = useRef<HTMLDivElement>(null);
   const rafRef    = useRef<number>(0);
   const cur       = useRef({ rx: 0, ry: 0 });
   const tgt       = useRef({ rx: 0, ry: 0 });
@@ -47,31 +47,23 @@ function ProfilePic() {
       cur.current.rx = lerp(cur.current.rx, tgt.current.rx, 0.1);
       cur.current.ry = lerp(cur.current.ry, tgt.current.ry, 0.1);
       const { rx, ry } = cur.current;
-
-      // Main card tilt
       card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-
-      // Shine moves with tilt
       const shine = card.querySelector('.pfp-shine') as HTMLElement;
       if (shine) {
         const nx = (ry / 20 + 1) / 2;
         const ny = (rx / 20 + 1) / 2;
         shine.style.background = `radial-gradient(circle at ${nx*100}% ${ny*100}%, rgba(255,255,255,0.2) 0%, transparent 60%)`;
       }
-
       const t1 = layer1Ref.current;
       const t2 = layer2Ref.current;
       const t3 = layer3Ref.current;
       if (t1) t1.style.transform = `translate(${ry * 1.8}px, ${-rx * 1.8}px) translateZ(30px)`;
       if (t2) t2.style.transform = `translate(${ry * 1.1}px, ${-rx * 1.1}px) translateZ(18px)`;
       if (t3) t3.style.transform = `translate(${ry * 0.5}px, ${-rx * 0.5}px) translateZ(8px)`;
-
-      // Dynamic shadow depth based on tilt
       const shadowX = ry * 0.8;
       const shadowY = -rx * 0.8;
       const shadowBlur = 20 + Math.abs(rx) * 0.8 + Math.abs(ry) * 0.8;
       card.style.filter = `drop-shadow(${shadowX}px ${shadowY + 8}px ${shadowBlur}px rgba(0,200,60,0.35))`;
-
       rafRef.current = requestAnimationFrame(tick);
     }
     rafRef.current = requestAnimationFrame(tick);
@@ -105,24 +97,20 @@ function ProfilePic() {
 
   return (
     <div ref={wrapRef} className="pfp-wrapper" onMouseEnter={triggerGlitch}>
-
       <div ref={layer3Ref} className="pfp-depth-layer pfp-depth-layer--3">
         <div className="pfp-orbit-ring pfp-orbit-ring--outer" />
       </div>
-
       <div ref={layer2Ref} className="pfp-depth-layer pfp-depth-layer--2">
         <div className="pfp-orbit-ring pfp-orbit-ring--inner" />
         <div className="pfp-dot pfp-dot--1" />
         <div className="pfp-dot pfp-dot--2" />
         <div className="pfp-dot pfp-dot--3" />
       </div>
-
       <div ref={cardRef} className="pfp-card">
         <div className="profile-ring">
           <img src={SRC} alt="emielsterdev" className="profile-image" />
           <div className="pfp-shine" />
         </div>
-
         {isGlitching && (
           <div className="pfp-glitch-wrap">
             <img src={SRC} alt="" className="pfp-glitch pfp-glitch--r" aria-hidden />
@@ -132,14 +120,12 @@ function ProfilePic() {
           </div>
         )}
       </div>
-
       <div ref={layer1Ref} className="pfp-depth-layer pfp-depth-layer--1">
         <div className="pfp-particle pfp-particle--1" />
         <div className="pfp-particle pfp-particle--2" />
         <div className="pfp-particle pfp-particle--3" />
         <div className="pfp-particle pfp-particle--4" />
       </div>
-
       <div className={`pfp-glow ${isGlitching ? 'pfp-glow--glitch' : ''}`} />
     </div>
   );
@@ -158,7 +144,6 @@ function BouncyName({ triggerKey }: { triggerKey: number }) {
   );
 }
 
-// ─── Content pools ────────────────────────────────────────────────────────────
 const KATEX_EQUATIONS = [
   String.raw`L_o(p,\omega_o) = \int_\Omega f(p,\omega_i,\omega_o) L_i(p,\omega_i)(n \cdot \omega_i) d\omega_i`,
   String.raw`D(h) = \frac{\alpha^2}{\pi((n \cdot h)^2(\alpha^2 - 1)+1)^2}`,
@@ -191,7 +176,6 @@ const BANNERS = [
 ];
 const PIPELINE_STAGES = ['Vertex Input','Vertex Shader','Tessellation','Geometry Shader','Rasterization','Fragment Shader','Depth/Stencil','Color Blend','Framebuffer'];
 
-// ─── Three.js ─────────────────────────────────────────────────────────────────
 function useThreeScene(mountRef: React.RefObject<HTMLDivElement>) {
   useEffect(() => {
     if (!mountRef.current) return;
@@ -248,12 +232,14 @@ function useThreeScene(mountRef: React.RefObject<HTMLDivElement>) {
   },[]);
 }
 
-// ─── 2D canvas ────────────────────────────────────────────────────────────────
 function use2DCanvas(canvasRef: React.RefObject<HTMLCanvasElement>) {
   const mouseRef=useRef({x:0.5,y:0.5});
   useEffect(()=>{
     const canvas=canvasRef.current; if(!canvas)return;
-    const ctx=canvas.getContext('2d'); if(!ctx)return;
+    // ── FIX: assert non-null so TS trusts ctx inside all closures ──
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    if(!ctx)return;
+
     let animId:number,W=0,H=0,lastTime=0,spawnTimer=0;
     const MAX_EL=18,SPAWN_MS=500;
     type Kind2D='shader'|'pipeline'|'vector'|'banner'|'sinwave'|'comment';
@@ -331,11 +317,13 @@ function use2DCanvas(canvasRef: React.RefObject<HTMLCanvasElement>) {
   },[]);
 }
 
-// ─── KaTeX ────────────────────────────────────────────────────────────────────
 interface KatexItem{id:number;eq:string;x:number;y:number;opacity:number;phase:'in'|'hold'|'out';phaseTimer:number;holdDuration:number;fontSize:number;}
 function useKatexElements(containerRef:React.RefObject<HTMLDivElement>){
   useEffect(()=>{
-    const container=containerRef.current;if(!container)return;
+    // ── FIX: assert non-null so TS trusts container inside all closures ──
+    const container = containerRef.current as HTMLDivElement;
+    if(!container)return;
+
     let uid=0;const items:KatexItem[]=[];const MAX=6;
     const rand=(a:number,b:number)=>a+Math.random()*(b-a);
     let spawnTimer=0,lastTime=0,animId:number;
@@ -371,7 +359,6 @@ function useKatexElements(containerRef:React.RefObject<HTMLDivElement>){
   },[]);
 }
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
 export function Hero() {
   const threeRef  = useRef<HTMLDivElement>(null!);
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -425,10 +412,21 @@ export function Hero() {
         </div>
         <div className="hero-actions">
           <button className="btn btn-primary" onClick={scrollToProjects}>
-            View My Work
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            <span className="btn-text">View My Work</span>
+            <span className="btn-arrow">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+              </svg>
+            </span>
           </button>
-          <button className="btn btn-outline" onClick={scrollToContact}>Get in Touch</button>
+          <button className="btn btn-outline" onClick={scrollToContact}>
+            <span className="btn-text">Get in Touch</span>
+            <span className="btn-arrow">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+              </svg>
+            </span>
+          </button>
         </div>
       </div>
     </section>
