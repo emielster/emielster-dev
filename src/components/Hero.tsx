@@ -37,8 +37,8 @@ function ProfilePic() {
   const glitchTimer = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    const wrap = wrapRef.current;
-    const card = cardRef.current;
+    const wrap = wrapRef.current as HTMLDivElement;
+    const card = cardRef.current as HTMLDivElement;
     if (!wrap || !card) return;
 
     function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
@@ -48,7 +48,7 @@ function ProfilePic() {
       cur.current.ry = lerp(cur.current.ry, tgt.current.ry, 0.1);
       const { rx, ry } = cur.current;
       card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-      const shine = card.querySelector('.pfp-shine') as HTMLElement;
+      const shine = card.querySelector('.pfp-shine') as HTMLElement | null;
       if (shine) {
         const nx = (ry / 20 + 1) / 2;
         const ny = (rx / 20 + 1) / 2;
@@ -235,8 +235,8 @@ function useThreeScene(mountRef: React.RefObject<HTMLDivElement>) {
 function use2DCanvas(canvasRef: React.RefObject<HTMLCanvasElement>) {
   const mouseRef=useRef({x:0.5,y:0.5});
   useEffect(()=>{
-    const canvas=canvasRef.current; if(!canvas)return;
-    // ── FIX: assert non-null so TS trusts ctx inside all closures ──
+    const canvas = canvasRef.current as HTMLCanvasElement;
+    if(!canvas)return;
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     if(!ctx)return;
 
@@ -320,7 +320,6 @@ function use2DCanvas(canvasRef: React.RefObject<HTMLCanvasElement>) {
 interface KatexItem{id:number;eq:string;x:number;y:number;opacity:number;phase:'in'|'hold'|'out';phaseTimer:number;holdDuration:number;fontSize:number;}
 function useKatexElements(containerRef:React.RefObject<HTMLDivElement>){
   useEffect(()=>{
-    // ── FIX: assert non-null so TS trusts container inside all closures ──
     const container = containerRef.current as HTMLDivElement;
     if(!container)return;
 
