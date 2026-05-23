@@ -1,28 +1,6 @@
-import { SpaceScene } from './components/SpaceScene';
-import { Navigation } from './components/Navigation';
-import { Hero } from './components/Hero';
-import { Projects } from './components/Projects';
-import { Contact } from './components/Contact';
-import { Skills } from './components/Skills';
-import { Games } from './components/Games';
-import { Reviews } from './components/Reviews';
-import './index.css';
+import Terminal from "./components/Terminal"
+import "./App.css"
 
-function App() {
-  return (
-    <>
-      <SpaceScene />
-      <Navigation />
-      <main className="content">
-        <Hero />
-        <Projects />
-        <Games />
-        <Skills />
-        <Reviews />
-        <Contact />
-      </main>
-    </>
-  );
-}
-
-export default App;
+export default function App() {
+   return <Terminal/>;
+};
