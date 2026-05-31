@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, KeyboardEvent } from 'react'
 
 const HOSTNAME = 'emielster.dev'
 const USER = 'visitor'
-const API = 'https://emielster.dev/api/mindify/v1'
+const API = 'https://www.emielster.dev/api/mindify/v1'
 
 type OutputLine = {
   type: 'input' | 'output' | 'error' | 'blank' | 'success' | 'prompt-input'
@@ -146,9 +146,11 @@ function makeBranches(session: Session | null, setSession: (s: Session | null) =
             '',
             '   Mindify portal commands:',
             '',
+            '   signup <username>      create a new account',
             '   login <username>       log in to your account',
             '   logout                 log out',
             '   whoami                 show current user',
+            '   connect <code>         connect a pending backend auth request',
             '   register <url>         validate and register a backend',
             '   backends               list your registered backends',
             '   exit                   return to main terminal',
@@ -192,6 +194,41 @@ function makeBranches(session: Session | null, setSession: (s: Session | null) =
           }
         },
 
+        signup: (args) => {
+          const username = args.trim()
+          if (!username) return { lines: ['', '   Usage: signup <username>', ''] }
+          return {
+            lines: [''],
+            flow: [
+              { label: 'Password', mask: true },
+              { label: 'Confirm password', mask: true },
+            ],
+            onComplete: async ([password, confirm]) => {
+              if (password !== confirm) return [
+                { type: 'blank', content: '' },
+                { type: 'error', content: '   ✗ Passwords do not match' },
+                { type: 'blank', content: '' },
+              ]
+              const res = await fetch(`${API}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+              })
+              const data = await res.json()
+              if (data.success) return [
+                { type: 'blank', content: '' },
+                { type: 'success', content: `   ✓ Account created! You can now login as @${data.username}` },
+                { type: 'blank', content: '' },
+              ]
+              return [
+                { type: 'blank', content: '' },
+                { type: 'error', content: `   ✗ ${data.error}` },
+                { type: 'blank', content: '' },
+              ]
+            },
+          }
+        },
+
         logout: () => ({
           lines: [],
           onComplete: async () => {
@@ -212,6 +249,36 @@ function makeBranches(session: Session | null, setSession: (s: Session | null) =
             ]
           },
         }),
+
+        connect: (args) => {
+          const code = args.trim()
+          if (!code) return { lines: ['', '   Usage: connect <code>', ''] }
+          if (!session) return { lines: ['', '   ✗ You must be logged in. Use: login <username>', ''] }
+          return {
+            lines: [],
+            onComplete: async () => {
+              const res = await fetch(`${API}/auth/connect`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${session.token}`,
+                },
+                body: JSON.stringify({ code }),
+              })
+              const data = await res.json()
+              if (data.success) return [
+                { type: 'blank', content: '' },
+                { type: 'success', content: '   ✓ You can now edit in Mindify using your backend!' },
+                { type: 'blank', content: '' },
+              ]
+              return [
+                { type: 'blank', content: '' },
+                { type: 'error', content: `   ✗ ${data.error}` },
+                { type: 'blank', content: '' },
+              ]
+            },
+          }
+        },
 
         register: (args) => {
           const backend_url = args.trim()
@@ -284,9 +351,9 @@ function makeBranches(session: Session | null, setSession: (s: Session | null) =
               { type: 'blank', content: '' },
               { type: 'output', content: '   Your backends:' },
               { type: 'blank', content: '' },
-              ...data.backends.map((b: { url: string; created_at: string }) => ({
+              ...data.backends.map((b: { url: string; claimed_at: string }) => ({
                 type: 'output' as const,
-                content: `   ${b.url}   (registered ${new Date(b.created_at).toLocaleDateString()})`,
+                content: `   ${b.url}   (registered ${new Date(b.claimed_at).toLocaleDateString()})`,
               })),
               { type: 'blank', content: '' },
             ]
@@ -338,12 +405,13 @@ export default function Terminal() {
   }, [])
 
   useEffect(() => {
+    if (!booted) return
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '')
     if (path) {
       const branch = BRANCHES.find(b => b.name === path)
-      if (branch) enterBranch(branch, true)
+      if (branch) enterBranch(branch, false)
     }
-  }, [])
+  }, [booted])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
