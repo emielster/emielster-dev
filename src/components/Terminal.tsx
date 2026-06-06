@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, KeyboardEvent } from 'react'
 
 const HOSTNAME = 'emielster.dev'
 const USER = 'visitor'
-const API = 'https://www.emielster.dev/api/mindify/v1'
 
 type OutputLine = {
   type: 'input' | 'output' | 'error' | 'blank' | 'success' | 'prompt-input'
@@ -26,10 +25,6 @@ type Branch = {
   commands: Record<string, (args: string) => BranchCommand>
 }
 
-type Session = {
-  username: string
-  token: string
-}
 
 const BOOT_LINES = [
   'emielsterdev terminal v1.0.0',
@@ -123,7 +118,7 @@ const ROOT_COMMANDS: Record<string, () => string[]> = {
   ],
 }
 
-function makeBranches(session: Session | null, setSession: (s: Session | null) => void): Branch[] {
+function makeBranches(): Branch[] {
   return [
     {
       name: 'mindify',
@@ -141,225 +136,35 @@ function makeBranches(session: Session | null, setSession: (s: Session | null) =
         '',
       ],
       commands: {
-        help: () => ({
-          lines: [
-            '',
-            '   Mindify portal commands:',
-            '',
-            '   signup <username>      create a new account',
-            '   login <username>       log in to your account',
-            '   logout                 log out',
-            '   whoami                 show current user',
-            '   connect <code>         connect a pending backend auth request',
-            '   register <url>         validate and register a backend',
-            '   backends               list your registered backends',
-            '   exit                   return to main terminal',
-            '',
-          ],
-        }),
+      help: () => ({
+        lines: [
+          '',
+          '   Mindify portal commands:',
+          '',
+          '   repo <type>     open the GitHub repo (type: app or server)',
+          '   download        download the installer',
+          '   exit            return to main terminal',
+          '',
+        ],
+      }),
 
-        whoami: () => ({
-          lines: session
-            ? ['', `   logged in as @${session.username}`, '']
-            : ['', '   not logged in', ''],
-        }),
-
-        login: (args) => {
-          const username = args.trim()
-          if (!username) return { lines: ['', '   Usage: login <username>', ''] }
-          return {
-            lines: [''],
-            flow: [{ label: 'Password', mask: true }],
-            onComplete: async ([password]) => {
-              const res = await fetch(`${API}/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
-              })
-              const data = await res.json()
-              if (data.success) {
-                setSession({ username: data.username, token: data.token })
-                return [
-                  { type: 'blank', content: '' },
-                  { type: 'success', content: `   ✓ Logged in as @${data.username}` },
-                  { type: 'blank', content: '' },
-                ]
-              }
-              return [
-                { type: 'blank', content: '' },
-                { type: 'error', content: `   ✗ ${data.error}` },
-                { type: 'blank', content: '' },
-              ]
-            },
-          }
-        },
-
-        signup: (args) => {
-          const username = args.trim()
-          if (!username) return { lines: ['', '   Usage: signup <username>', ''] }
-          return {
-            lines: [''],
-            flow: [
-              { label: 'Password', mask: true },
-              { label: 'Confirm password', mask: true },
-            ],
-            onComplete: async ([password, confirm]) => {
-              if (password !== confirm) return [
-                { type: 'blank', content: '' },
-                { type: 'error', content: '   ✗ Passwords do not match' },
-                { type: 'blank', content: '' },
-              ]
-              const res = await fetch(`${API}/auth/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
-              })
-              const data = await res.json()
-              if (data.success) return [
-                { type: 'blank', content: '' },
-                { type: 'success', content: `   ✓ Account created! You can now login as @${data.username}` },
-                { type: 'blank', content: '' },
-              ]
-              return [
-                { type: 'blank', content: '' },
-                { type: 'error', content: `   ✗ ${data.error}` },
-                { type: 'blank', content: '' },
-              ]
-            },
-          }
-        },
-
-        logout: () => ({
-          lines: [],
-          onComplete: async () => {
-            if (!session) return [
-              { type: 'blank', content: '' },
-              { type: 'error', content: '   ✗ Not logged in' },
-              { type: 'blank', content: '' },
-            ]
-            await fetch(`${API}/auth/logout`, {
-              method: 'POST',
-              headers: { Authorization: `Bearer ${session.token}` },
-            })
-            setSession(null)
-            return [
-              { type: 'blank', content: '' },
-              { type: 'output', content: '   Logged out.' },
-              { type: 'blank', content: '' },
-            ]
-          },
-        }),
-
-        connect: (args) => {
-          const code = args.trim()
-          if (!code) return { lines: ['', '   Usage: connect <code>', ''] }
-          if (!session) return { lines: ['', '   ✗ You must be logged in. Use: login <username>', ''] }
-          return {
-            lines: [],
-            onComplete: async () => {
-              const res = await fetch(`${API}/auth/connect`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${session.token}`,
-                },
-                body: JSON.stringify({ code }),
-              })
-              const data = await res.json()
-              if (data.success) return [
-                { type: 'blank', content: '' },
-                { type: 'success', content: '   ✓ You can now edit in Mindify using your backend!' },
-                { type: 'blank', content: '' },
-              ]
-              return [
-                { type: 'blank', content: '' },
-                { type: 'error', content: `   ✗ ${data.error}` },
-                { type: 'blank', content: '' },
-              ]
-            },
-          }
-        },
-
-        register: (args) => {
-          const backend_url = args.trim()
-          if (!backend_url) return { lines: ['', '   Usage: register <url>', ''] }
-          if (!session) return { lines: ['', '   ✗ You must be logged in. Use: login <username>', ''] }
-          return {
-            lines: ['', `   Validating backend: ${backend_url}`, ''],
-            onComplete: async () => {
-              const validateRes = await fetch(`${API}/validate`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${session.token}`,
-                },
-                body: JSON.stringify({ backend_url }),
-              })
-              const validateData = await validateRes.json()
-              if (!validateData.valid) return [
-                { type: 'blank', content: '' },
-                { type: 'error', content: `   ✗ Backend signature invalid. Missing: ${validateData.missing?.join(', ')}` },
-                { type: 'blank', content: '' },
-              ]
-
-              const registerRes = await fetch(`${API}/register`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${session.token}`,
-                },
-                body: JSON.stringify({ backend_url }),
-              })
-              const registerData = await registerRes.json()
-              if (registerData.success) return [
-                { type: 'blank', content: '' },
-                { type: 'success', content: `   ✓ Backend registered: ${backend_url}` },
-                { type: 'blank', content: '' },
-              ]
-              return [
-                { type: 'blank', content: '' },
-                { type: 'error', content: `   ✗ ${registerData.error}` },
-                { type: 'blank', content: '' },
-              ]
-            },
-          }
-        },
-
-        backends: () => ({
-          lines: [],
-          onComplete: async () => {
-            if (!session) return [
-              { type: 'blank', content: '' },
-              { type: 'error', content: '   ✗ You must be logged in. Use: login <username>' },
-              { type: 'blank', content: '' },
-            ]
-            const res = await fetch(`${API}/backends`, {
-              headers: { Authorization: `Bearer ${session.token}` },
-            })
-            const data = await res.json()
-            if (!data.success) return [
-              { type: 'blank', content: '' },
-              { type: 'error', content: `   ✗ ${data.error}` },
-              { type: 'blank', content: '' },
-            ]
-            if (data.backends.length === 0) return [
-              { type: 'blank', content: '' },
-              { type: 'output', content: '   No backends registered yet. Use: register <url>' },
-              { type: 'blank', content: '' },
-            ]
-            return [
-              { type: 'blank', content: '' },
-              { type: 'output', content: '   Your backends:' },
-              { type: 'blank', content: '' },
-              ...data.backends.map((b: { url: string; claimed_at: string }) => ({
-                type: 'output' as const,
-                content: `   ${b.url}   (registered ${new Date(b.claimed_at).toLocaleDateString()})`,
-              })),
-              { type: 'blank', content: '' },
-            ]
-          },
-        }),
+      repo: (args) => {
+        const type = args.trim().toLowerCase()
+        if (type === 'app') {
+          window.open('https://github.com/emielster/mindify', '_blank')
+          return { lines: ['', '   Opening the Mindify app repository...', ''] }
+        }
+        if (type === 'server') {
+          window.open('https://github.com/emielster/mindify-server', '_blank')
+          return { lines: ['', '   Opening the Mindify server repository...', ''] }
+        }
+        return { lines: ['', '   Not sure which one you mean. Try: repo app or repo server', ''] }
       },
+
+      download: () => ({
+        lines: ['', '   The installer is not available yet. Check back soon!', ''],
+      }),
+    },
     },
   ]
 }
@@ -376,11 +181,10 @@ export default function Terminal() {
   const [loading, setLoading] = useState(false)
   const [loadingText, setLoadingText] = useState('')
   const [loadingFrame, setLoadingFrame] = useState(0)
-  const [session, setSession] = useState<Session | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const BRANCHES = makeBranches(session, setSession)
+  const BRANCHES = makeBranches()
 
   useEffect(() => {
     if (!loading) return
