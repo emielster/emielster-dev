@@ -9,8 +9,8 @@
   ],
   "rewrites": [
     {
-      "source": "/api/mindify/v1/:path*",
-      "destination": "/api/mindify/v1/[...route]"
+      "source": "/api/thinkify/v1/:path*",
+      "destination": "/api/thinkify/v1/[...route]"
     },
     {
       "source": "/((?!api/).*)",

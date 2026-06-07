@@ -44,7 +44,7 @@ const ROOT_COMMANDS: Record<string, () => string[]> = {
     '   skills ............     what i know',
     '   experience ........     where i\'ve been',
     '   projects ..........     what i\'ve built',
-    '   mindify ...........     open mindify portal',
+    '   thinkify ...........    open Thinkify portal',
     '   contact ...........     get in touch (love to hear from you!)',
     '   clear .............     clear the terminal',
     '   help ..............     display this help message',
@@ -59,9 +59,9 @@ const ROOT_COMMANDS: Record<string, () => string[]> = {
     '   using Vulkan as backend, and a custom ECS (Entity Component System) built from scratch.',
     '',
     '   Sometimes throughout the day, sudden ideas pop up in my head, and I have nowhere to',
-    '   store them. That\'s why I created Mindify.',
+    '   store them. That\'s why I created Thinkify.',
     '',
-    '   Type \'mindify\' to open the Mindify portal.',
+    '   Type \'thinkify\' to open the Thinkify portal.',
     '',
   ],
   skills: () => [
@@ -98,9 +98,9 @@ const ROOT_COMMANDS: Record<string, () => string[]> = {
     '   [mint-engine]',
     '       Custom C++ engine using Vulkan as its main backend. (coming soon)',
     '',
-    '   [mindify]',
+    '   [thinkify]',
     '       Capture and publish your ideas to the world.',
-    '       -> type "mindify" to open the Mindify portal.',
+    '       -> type "thinkify" to open the Thinkify portal.',
     '',
     '   [many-more]',
     '       Find it at my GitHub!',
@@ -121,17 +121,17 @@ const ROOT_COMMANDS: Record<string, () => string[]> = {
 function makeBranches(): Branch[] {
   return [
     {
-      name: 'mindify',
+      name: 'thinkify',
       bootLines: [
         '',
-        '   ███╗   ███╗██╗███╗   ██╗██████╗ ██╗███████╗██╗   ██╗',
-        '   ████╗ ████║██║████╗  ██║██╔══██╗██║██╔════╝╚██╗ ██╔╝',
-        '   ██╔████╔██║██║██╔██╗ ██║██║  ██║██║█████╗   ╚████╔╝ ',
-        '   ██║╚██╔╝██║██║██║╚██╗██║██║  ██║██║██╔══╝    ╚██╔╝  ',
-        '   ██║ ╚═╝ ██║██║██║ ╚████║██████╔╝██║██║        ██║   ',
-        '   ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═════╝ ╚═╝╚═╝        ╚═╝   ',
+        '████████╗██╗  ██╗██╗███╗   ██╗██╗  ██╗██╗███████╗██╗   ██╗',
+        '╚══██╔══╝██║  ██║██║████╗  ██║██║ ██╔╝██║██╔════╝╚██╗ ██╔╝',
+        '   ██║   ███████║██║██╔██╗ ██║█████╔╝ ██║█████╗   ╚████╔╝ ',
+        '   ██║   ██╔══██║██║██║╚██╗██║██╔═██╗ ██║██╔══╝    ╚██╔╝  ',
+        '   ██║   ██║  ██║██║██║ ╚████║██║  ██╗██║██║        ██║   ',
+        '   ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝  ',
         '',
-        '   Welcome to the Mindify portal.',
+        '   Welcome to the Thinkify portal.',
         '   Type \'help\' to see available commands.',
         '',
       ],
@@ -139,7 +139,7 @@ function makeBranches(): Branch[] {
       help: () => ({
         lines: [
           '',
-          '   Mindify portal commands:',
+          '   Thinkify portal commands:',
           '',
           '   repo <type>     open the GitHub repo (type: app or server)',
           '   download        download the installer',
@@ -151,12 +151,12 @@ function makeBranches(): Branch[] {
       repo: (args) => {
         const type = args.trim().toLowerCase()
         if (type === 'app') {
-          window.open('https://github.com/emielster/mindify', '_blank')
-          return { lines: ['', '   Opening the Mindify app repository...', ''] }
+          window.open('https://github.com/emielster/thinkify', '_blank')
+          return { lines: ['', '   Opening the Thinkify app repository...', ''] }
         }
         if (type === 'server') {
-          window.open('https://github.com/emielster/mindify-server', '_blank')
-          return { lines: ['', '   Opening the Mindify server repository...', ''] }
+          window.open('https://github.com/emielster/thinkify-server', '_blank')
+          return { lines: ['', '   Opening the Thinkify server repository...', ''] }
         }
         return { lines: ['', '   Not sure which one you mean. Try: repo app or repo server', ''] }
       },

@@ -1,22 +1,16 @@
-import login from '../../../lib/mindify/handlers/auth/login/index.js'
-import logout from '../../../lib/mindify/handlers/auth/logout/index.js'
-import poll from '../../../lib/mindify/handlers/auth/poll/index.js'
-import connect from '../../../lib/mindify/handlers/auth/connect/index.js'
-import code from '../../../lib/mindify/handlers/auth/code/index.js'
-import register from '../../../lib/mindify/handlers/register/index.js'
-import validate from '../../../lib/mindify/handlers/validate/index.js'
-import backends from '../../../lib/mindify/handlers/backends/index.js'
-import check from '../../../lib/mindify/handlers/check/index.js'
-import register_account from '../../../lib/mindify/handlers/auth/register/index.js'
+import login from '../../../lib/thinkify/handlers/auth/login/index.js'
+import logout from '../../../lib/thinkify/handlers/auth/logout/index.js'
+import register from '../../../lib/thinkify/handlers/register/index.js'
+import validate from '../../../lib/thinkify/handlers/validate/index.js'
+import backends from '../../../lib/thinkify/handlers/backends/index.js'
+import check from '../../../lib/thinkify/handlers/check/index.js'
+import register_account from '../../../lib/thinkify/handlers/auth/register/index.js'
 
 
 const ROUTES = {
   'auth/login':   { handler: login,    methods: ['POST'] },
   'auth/logout':  { handler: logout,   methods: ['POST'] },
-  'auth/poll':    { handler: poll,     methods: ['GET']  },
   'auth/register': { handler: register_account, methods: ['POST'] },
-  'auth/connect': { handler: connect,  methods: ['POST'] },
-  'auth/code':    { handler: code,     methods: ['POST'] },
   'register':     { handler: register, methods: ['POST'] },
   'validate':     { handler: validate, methods: ['POST'] },
   'backends':     { handler: backends, methods: ['GET'] },
@@ -34,7 +28,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end()
 
     const route = req.url
-        .replace('/api/mindify/v1/', '')
+        .replace('/api/thinkify/v1/', '')
         .split('?')[0]
 
   const match = ROUTES[route]
