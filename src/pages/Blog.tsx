@@ -1,19 +1,28 @@
 import { Link } from "react-router-dom";
 import { parseMeta } from "../utils/parseMeta.ts";
 
+interface PostMeta {
+	title: string;
+	date: string;
+}
+
+interface Post extends PostMeta {
+	slug: string;
+}
+
 const blogs = import.meta.glob<string>("../blogs/*.md", {
 	query: "?raw",
 	import: "default",
 	eager: true
 });
 
-const posts = Object.entries(blogs)
+const posts: Post[] = Object.entries(blogs)
 	.map(([path, content]) => {
 		const { data } = parseMeta(content);
-		const slug = path.split("/").pop().replace(".md", "");
-		return { slug, ...data };
+		const slug = path.split("/").pop()?.replace(".md", "") ?? path;
+		return { slug, ...(data as unknown as PostMeta) };
 	})
-	.sort((a, b) => new Date(b.date) - new Date(a.date));
+	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export default function Blog() {
 	return (
