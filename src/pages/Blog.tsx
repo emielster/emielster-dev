@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { parseMeta } from "../utils/parseMeta.ts";
 
-const blogs = import.meta.glob("../blogs/*.md", {
+const blogs = import.meta.glob<string>("../blogs/*.md", {
 	query: "?raw",
 	import: "default",
 	eager: true

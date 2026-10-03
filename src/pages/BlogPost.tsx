@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { parseMeta } from "../utils/parseMeta.ts";
 
-const blogs = import.meta.glob("../blogs/*.md", {
+const blogs = import.meta.glob<string>("../blogs/*.md", {
 	query: "?raw",
 	import: "default",
 	eager: true
