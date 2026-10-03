@@ -4,7 +4,6 @@ export default function Home() {
 	return (
 		<div>
 
-			<img src="/banner.png" width="500"/>
 			<p>Hello and welcome to my tiny website!</p>
 			<p>I am emielster(dev), and this is my website where I put my projects, blogs, etc.</p>
 			<h2>Contact</h2>

@@ -7,8 +7,7 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Projects from "./pages/Projects";
 import Now from "./pages/Now";
-
-
+import BlogPost from "./pages/BlogPost";
 
 export default function App() {
 	return (
@@ -19,6 +18,7 @@ export default function App() {
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="/blog" element={<Blog />} />
+						<Route path="/blog/:slug" element={<BlogPost />} /> 
 						<Route path="/projects" element={<Projects />} />
 						<Route path="/about" element={<About />} />
 						<Route path="/now" element={<Now />} />

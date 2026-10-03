@@ -14,6 +14,10 @@ export default function() {
 				<li><a href="https://doc.rust-lang.org/stable/book/index.html">The Rust Programming Language Book</a></li>
 			</ul>
 
+			<h2>Currently watching</h2>
+			<ul>
+				<li>The Mentalist</li>
+			</ul>
 		</div>
 	);
 }

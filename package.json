@@ -26,10 +26,13 @@
     "@types/three": "^0.183.1",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
+    "buffer": "^6.0.3",
+    "gray-matter": "^4.0.3",
     "jsonwebtoken": "^9.0.3",
     "katex": "^0.16.38",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.18.4",
     "three": "^0.183.2"
   },
